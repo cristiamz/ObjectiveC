@@ -1,0 +1,62 @@
+bool isDivideBy(int number, int a, int b)
+{
+int reminder = number % a;
+  reminder += number % b;
+  
+  if (reminder == 0)
+    return true;
+  else
+    return false;
+}
+
+//TestCase
+// TODO: Replace examples and use TDD development by writing your own tests
+@implementation TestSuite
++ (void)assertIsDivideBy: (bool)expected andActual: (bool)actual
+{
+  // NOTE: this custom assertion method is required because UnitKit
+  // UKIntsEqual cannot safely handle `unsigned long long`s
+  if (actual != expected) NSLog(@"Expected: %llu, instead got: %llu\n", expected, actual);
+  UKTrue(actual == expected);
+}
+- (void)testExamples
+{
+  [TestSuite assertIsDivideBy: true andActual: isDivideBy(8, 2, 4)];
+  [TestSuite assertIsDivideBy: true andActual: isDivideBy(12, -3, 4)];
+  [TestSuite assertIsDivideBy: false andActual: isDivideBy(8, 3, 4)];
+  [TestSuite assertIsDivideBy: false andActual: isDivideBy(48, 2, -5)];
+  
+}
+- (void)testFixed
+{
+
+  [TestSuite assertIsDivideBy: true andActual: isDivideBy(-100, -25, 10)];
+  [TestSuite assertIsDivideBy: false andActual: isDivideBy(10000, 5, -3)];
+  [TestSuite assertIsDivideBy: true andActual: isDivideBy(4, 4, 2)];
+  [TestSuite assertIsDivideBy: false andActual: isDivideBy(5, 2, 3)];
+  [TestSuite assertIsDivideBy: false andActual: isDivideBy(-96, 25, 17)];
+
+}
+- (void)testRandom
+{
+
+  srand(time(NULL));
+  bool (^solution)(int,int,int) = ^ bool (int number,int a, int b) {
+      int reminder = number % a;
+      reminder += number % b;
+  
+      if (reminder == 0)
+          return true;
+      else
+        return false;
+  };
+  for (int i = 0; i < 100; i++) {
+        int n = 1 + rand() % 69;
+        int a = 1 + rand() % 69;
+        int b = 1 + rand() % 69;
+    [TestSuite assertIsDivideBy: solution(n,a,b) andActual: isDivideBy(n,a,b)];
+  }
+
+  
+  }
+@end
