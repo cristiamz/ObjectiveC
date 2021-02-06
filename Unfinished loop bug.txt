@@ -1,0 +1,56 @@
+unsigned int sum(const int n)
+{
+        int res = 0;
+
+        for (int i = 1; i <= n;)
+        {
+                res += i;
+    i++;
+        }
+
+        return res;
+}
+
+//Test Cases
+// TODO: Replace examples and use TDD development by writing your own tests
+@implementation TestSuite
++ (void)assertSumEqual: (int)expected andActual: (int)actual
+{
+  // NOTE: this custom assertion method is required because UnitKit
+  // UKIntsEqual cannot safely handle `unsigned long long`s
+  if (actual != expected) NSLog(@""Expected: %llu, instead got: %llu\n"", expected, actual);
+  UKTrue(actual == expected);
+}
+- (void)testExamples
+{
+  [TestSuite assertSumEqual: 15 andActual: sum(5)];
+  [TestSuite assertSumEqual: 55 andActual: sum(10)];
+  [TestSuite assertSumEqual: 136 andActual: sum(16)];
+  [TestSuite assertSumEqual: 6105 andActual: sum(110)];
+}
+- (void)testFixed
+{
+  [TestSuite assertSumEqual: 4656 andActual: sum(96)];
+  [TestSuite assertSumEqual: 4851 andActual: sum(98)];
+  [TestSuite assertSumEqual: 5995 andActual: sum(109)];
+}
+- (void)testRandom
+{
+  srand(time(NULL));
+  int (^solution)(int) = ^ int (int n) {
+    int res = 0;
+
+    	for (int i = 1; i <= n;)
+    	{
+    		res += i;
+        i++;
+    	}
+    
+    	return res;
+  };
+  for (int i = 0; i < 100; i++) {
+    int n = 1 + rand() % 69;
+    [TestSuite assertSumEqual: solution(n) andActual: sum(n)];
+  }
+}
+@end
