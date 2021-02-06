@@ -1,0 +1,50 @@
+char* boolean_to_string(bool b){
+  //Your code here
+  if (b) {
+    return "true"; 
+  } else { 
+    return "false";
+  }
+}
+
+//testcase
+// TODO: Replace examples and use TDD development by writing your own tests
+@implementation TestSuite
++ (void)assertboolean_to_string: (char*)expected andActual: (char*)actual
+{
+  // NOTE: this custom assertion method is required because UnitKit
+  // UKIntsEqual cannot safely handle `unsigned long long`s
+  if (actual != expected) NSLog(@"Expected: %llu, instead got: %llu\n", expected, actual);
+  UKTrue(actual == expected);
+}
+- (void)testExamples
+{
+  [TestSuite assertboolean_to_string: "true" andActual: boolean_to_string(true)];
+  [TestSuite assertboolean_to_string: "false" andActual: boolean_to_string(false)];
+
+}
+- (void)testFixed
+{
+  [TestSuite assertboolean_to_string: "true" andActual: boolean_to_string(true)];
+  [TestSuite assertboolean_to_string: "false" andActual: boolean_to_string(false)];
+}
+- (void)testRandom
+{
+  srand(time(NULL));
+  char* (^solution)(bool) = ^ char* (bool b) {
+   if (b) {
+    return "true"; 
+  } else { 
+    return "false";
+  }
+  };
+  for (int i = 0; i < 100; i++) {
+    int n = 1 + rand() % 69;
+    bool x = false;
+    if (n%2 == 0)
+      x = true;
+    [TestSuite assertboolean_to_string: solution(x) andActual: boolean_to_string(x)];
+  }
+}
+@end
+
