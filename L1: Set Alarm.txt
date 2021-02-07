@@ -1,0 +1,47 @@
+bool set_alarm( const bool employed, const bool vacation )
+{
+  return (employed && !vacation);
+}
+
+//Test
+// TODO: Replace examples and use TDD development by writing your own tests
+@implementation TestSuite
++ (void)assertSet_alarm: (bool)expected andActual: (bool)actual
+{
+  // NOTE: this custom assertion method is required because UnitKit
+  // UKIntsEqual cannot safely handle `unsigned long long`s
+  if (actual != expected) NSLog(@"Expected: %llu, instead got: %llu\n", expected, actual);
+  UKTrue(actual == expected);
+}
+- (void)testExamples
+{
+  [TestSuite assertSet_alarm: true andActual: set_alarm(true, false)];
+  [TestSuite assertSet_alarm: false andActual: set_alarm(false, false)];
+  [TestSuite assertSet_alarm: false andActual: set_alarm(false, true)];
+  [TestSuite assertSet_alarm: false andActual: set_alarm(true, true)];
+
+}
+- (void)testFixed
+{
+  [TestSuite assertSet_alarm: true andActual: set_alarm(true, false)];
+  [TestSuite assertSet_alarm: false andActual: set_alarm(false, false)];
+  [TestSuite assertSet_alarm: false andActual: set_alarm(false, true)];
+  [TestSuite assertSet_alarm: false andActual: set_alarm(true, true)];
+}
+- (void)testRandom
+{
+  srand(time(NULL));
+  bool (^solution)(bool,bool) = ^ bool (bool employed, bool vacation) {
+    return (employed && !vacation);
+  };
+  for (int i = 0; i < 100; i++) {
+    int n = 1 + rand() % 69;
+    int x = 1 + rand() % 69;
+    bool a = n%2 > 0;
+    bool b = x%2 > 0;
+    [TestSuite assertSet_alarm: solution(a,b) andActual: set_alarm(a,b)];
+  }
+}
+@end
+
+
