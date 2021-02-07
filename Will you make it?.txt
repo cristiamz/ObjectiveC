@@ -1,0 +1,40 @@
+bool zero_fuel(int distance_to_pump, int mpg, int fuel_left) 
+{
+  return distance_to_pump <= fuel_left * mpg;
+}
+
+//Test
+// TODO: Replace examples and use TDD development by writing your own tests
+@implementation TestSuite
++ (void)assertZerofuel: (bool)expected andActual: (bool)actual
+{
+  // NOTE: this custom assertion method is required because UnitKit
+  // UKIntsEqual cannot safely handle `unsigned long long`s
+  if (actual != expected) NSLog(@"Expected: %llu, instead got: %llu\n", expected, actual);
+  UKTrue(actual == expected);
+}
+- (void)testExamples
+{
+  [TestSuite assertZero_fuel: true andActual: zero_fuel(50, 25, 2)];
+  [TestSuite assertZero_fuel: false andActual: zero_fuel(100, 50, 1)];
+}
+- (void)testFixed
+{
+  [TestSuite assertZero_fuel: true andActual: zero_fuel(60, 30, 3)];
+  [TestSuite assertZero_fuel: false andActual: zero_fuel(70, 25, 1)];
+  [TestSuite assertZero_fuel: false andActual: zero_fuel(100, 25, 3)];
+}
+- (void)testRandom
+{
+  srand(time(NULL));
+  bool (^solution)(int,int,int) = ^bool (int a, int b, int c)  {
+    return a <= c * b;
+  };
+  for (int i = 0; i < 100; i++) {
+    int a = 1 + rand() % 69;
+    int b = 1 + rand() % 69; 
+    int c = 1 + rand() % 69;
+    [TestSuite assertZero_fuel: solution(a,b,c) andActual: zero_fuel(a,b,c)];
+  }
+}
+@end
